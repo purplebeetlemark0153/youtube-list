@@ -1,0 +1,46 @@
+/* Custom aesthetic styles for OTONOWA */
+:root {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Noto Sans JP', system-ui, -apple-system, sans-serif;
+  background-color: #FDFBF7;
+  color: #2C2C2C;
+}
+
+/* Elegant Japanese-style custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(238, 223, 204, 0.25);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(140, 122, 107, 0.4);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(140, 122, 107, 0.7);
+}
+
+/* Custom range input styling for audio & opacity */
+input[type="range"] {
+  accent-color: #5B7052;
+}
+
+/* Subtle washi paper texture overlay pattern using SVG data URL */
+.washi-pattern {
+  background-color: #FDFBF7;
+  background-image: radial-gradient(#E8DFD1 0.75px, transparent 0.75px), radial-gradient(#E8DFD1 0.75px, #FDFBF7 0.75px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+}
+

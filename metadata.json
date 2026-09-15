@@ -1,0 +1,6 @@
+{
+  "name": "音の和 OTONOWA - 日式 YouTube 播放清單管理",
+  "description": "單頁式日式風格 YouTube 播放清單管理系統，支援 LocalStorage 免登入儲存、連續自動播放、影片與清單排序、雙重搜尋、JSON匯出入及自訂和風桌布遮罩。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
