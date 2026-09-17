@@ -18,7 +18,7 @@ const CHARACTERS: Record<CharacterId, {
   dog: {
     name: '小白狗',
     avatar: '🐶',
-    quotes: ['汪！', '汪汪！', '汪汪汪汪汪！''],
+    quotes: ['汪！', '汪汪！', '汪汪汪汪汪！'],
     musicQuotes: ['汪汪！這首歌真好聽 🎵', '（隨著節奏搖尾巴）🐶✨'],
   },
   girl: {
