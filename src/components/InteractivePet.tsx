@@ -139,7 +139,7 @@ export const InteractivePet: React.FC<InteractivePetProps> = ({ isPlaying = fals
         </div>
       )}
 
-      {/* 🐶 角色本體（放大尺寸至 text-11xl / w-40 h-40） */}
+      {/* 🐶 角色本體（放大尺寸至 text-11xl / w-20 h-20） */}
       <div
         onClick={handlePetClick}
         onMouseDown={(e) => handleStart(e.clientX, e.clientY)}
