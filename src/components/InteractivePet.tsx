@@ -44,13 +44,14 @@ const CHARACTERS: Record<CharacterId, {
 export const InteractivePet: React.FC<InteractivePetProps> = ({ isPlaying = false }) => {
   // 1. 讀取或儲存角色與位置偏好（預設在右上角）
   const [character, setCharacter] = useState<CharacterId>(() => {
-    return (localStorage.getItem('pet_character') as CharacterId) || 'dog';
+    const saved = localStorage.getItem('pet_character') as CharacterId;
+    return saved && CHARACTERS[saved] ? saved : 'dog';
   });
 
   const [position, setPosition] = useState(() => {
     const saved = localStorage.getItem('pet_position');
-    // 預設位置改為右上角 (X: 視窗寬度 - 140, Y: 40)
-    return saved ? JSON.parse(saved) : { x: Math.max(20, window.innerWidth - 140), y: 40 };
+    // 預設位置改為右上角 (X: 視窗寬度 - 160, Y: 40)
+    return saved ? JSON.parse(saved) : { x: Math.max(20, window.innerWidth - 160), y: 40 };
   });
 
   // 2. 狀態控管：拖曳、對話框、選單
@@ -88,8 +89,8 @@ export const InteractivePet: React.FC<InteractivePetProps> = ({ isPlaying = fals
 
   const handleMove = (clientX: number, clientY: number) => {
     if (!isDragging) return;
-    const newX = Math.max(10, Math.min(window.innerWidth - 100, clientX - dragOffset.x));
-    const newY = Math.max(10, Math.min(window.innerHeight - 120, clientY - dragOffset.y));
+    const newX = Math.max(10, Math.min(window.innerWidth - 120, clientX - dragOffset.x));
+    const newY = Math.max(10, Math.min(window.innerHeight - 140, clientY - dragOffset.y));
     setPosition({ x: newX, y: newY });
   };
 
@@ -107,15 +108,15 @@ export const InteractivePet: React.FC<InteractivePetProps> = ({ isPlaying = fals
       style={{ left: `${position.x}px`, top: `${position.y}px` }}
       className="fixed z-[9999] select-none touch-none flex flex-col items-center justify-center"
     >
-      {/* 💬 對話泡泡（字體與邊框加大） */}
+      {/* 💬 對話泡泡 */}
       {dialog && (
-        <div className="absolute -top-14 bg-white/95 text-gray-800 text-sm font-medium px-4 py-2 rounded-2xl shadow-xl border border-gray-200 whitespace-nowrap animate-fade-in pointer-events-none">
+        <div className="absolute -top-14 bg-white/95 text-gray-800 text-sm font-medium px-4 py-2 rounded-2xl shadow-xl border border-gray-200 whitespace-nowrap pointer-events-none transition-all duration-200">
           {dialog}
           <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white rotate-45 border-r border-b border-gray-200"></div>
         </div>
       )}
 
-      {/* 🔄 角色切換小選單（按鈕加大） */}
+      {/* 🔄 角色切換小選單 */}
       {showMenu && (
         <div className="absolute -top-20 flex gap-2 bg-white/95 p-2 rounded-full shadow-lg border border-gray-200 backdrop-blur-md">
           {(Object.keys(CHARACTERS) as CharacterId[]).map((id) => (
@@ -132,14 +133,14 @@ export const InteractivePet: React.FC<InteractivePetProps> = ({ isPlaying = fals
         </div>
       )}
 
-      {/* 🎧 聽歌狀態下的音符氣氛小動畫（加大放大） */}
+      {/* 🎧 聽歌狀態下的音符氣氛小動畫 */}
       {isPlaying && !isDragging && (
-        <div className="absolute -top-6 right-0 text-base animate-bounce text-indigo-500 font-bold">
+        <div className="absolute -top-6 right-0 text-lg animate-bounce text-indigo-500 font-bold">
           🎵
         </div>
       )}
 
-      {/* 🐶 角色本體（放大尺寸至 text-11xl / w-20 h-20） */}
+      {/* 🐶 角色本體 */}
       <div
         onClick={handlePetClick}
         onMouseDown={(e) => handleStart(e.clientX, e.clientY)}
@@ -153,9 +154,10 @@ export const InteractivePet: React.FC<InteractivePetProps> = ({ isPlaying = fals
         }`}
       >
         {currentChar.customImg ? (
-          <img src={currentChar.customImg} alt={currentChar.name} className="w-20 h-20 object-contain filter drop-shadow-lg" />
+          <img src={currentChar.customImg} alt={currentChar.name} className="w-28 h-28 object-contain filter drop-shadow-lg" />
         ) : (
-          <div className="text-11xl filter drop-shadow-lg leading-none">
+          /* ✅ 改用 text-[9rem] (約 112px 大小)，超顯眼！ */
+          <div className="text-[7rem] filter drop-shadow-lg leading-none">
             {currentChar.avatar}
           </div>
         )}
@@ -171,3 +173,5 @@ export const InteractivePet: React.FC<InteractivePetProps> = ({ isPlaying = fals
     </div>
   );
 };
+
+export default InteractivePet;
