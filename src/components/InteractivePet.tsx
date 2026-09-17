@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 // 定義角色類型
 export type CharacterId = 'dog' | 'girl' | 'dragon' | 'soot';
@@ -10,31 +10,31 @@ interface InteractivePetProps {
 // 四大角色基本設定與對話庫
 const CHARACTERS: Record<CharacterId, {
   name: string;
-  avatar: string; // 預設以精緻 SVG/Emoji 呈現，隨時可替換成圖片網址
+  avatar: string; // 預設以精緻 Emoji 呈現，隨時可替換成圖片網址
   customImg?: string; // 若有自訂圖片/GIF 網址可填入此處
   quotes: string[];
   musicQuotes: string[];
 }> = {
   dog: {
-    name: '白色小狗',
+    name: '小白狗',
     avatar: '🐶',
-    quotes: ['汪！今天過得好嗎？', '摸摸我的頭～', '想聽一點輕鬆的音樂！'],
+    quotes: ['汪！', '汪汪！', '汪汪汪汪汪！''],
     musicQuotes: ['汪汪！這首歌真好聽 🎵', '（隨著節奏搖尾巴）🐶✨'],
   },
   girl: {
-    name: '帽子雙馬尾女孩',
+    name: '小女孩',
     avatar: '👧',
-    quotes: ['準備好要聽什麼歌了嗎？', '紅色書包裡裝滿了播放清單喔！', '今天也要加油！✨'],
+    quotes: ['準備好要聽什麼歌了嗎？', '書包裡裝滿了播放清單喔！', '今天也要加油！✨'],
     musicQuotes: ['這是我最喜歡的歌！🎶', '（跟著音樂輕聲哼唱~）👧💖'],
   },
   dragon: {
-    name: '可愛小火龍',
+    name: '小火龍',
     avatar: '🐲',
-    quotes: ['呼～小心不要被我的小火花燙到！🔥', '龍族也是很懂音樂的！', '想要聽點超酷的歌！'],
-    musicQuotes: ['這個 Pass 🔥！太熱血了！', '（高興地噴出小音符火花）🎶🔥'],
+    quotes: ['🔥FIRE！', 'BURST！！', 'EXPLOSION！！！'],
+    musicQuotes: ['這個 Music 🔥！太Hot了！', '（高興地噴出小音符火花）🎶🔥'],
   },
   soot: {
-    name: '煤炭精靈',
+    name: '小精靈',
     avatar: '👾',
     quotes: ['……（悄悄地看著你）', '你有帶金平糖嗎？✨', '（滾來滾去）'],
     musicQuotes: ['（隨著拍子興奮地跳躍）✨', '♪(┌・ω・)┌ 🎵'],
@@ -42,14 +42,15 @@ const CHARACTERS: Record<CharacterId, {
 };
 
 export const InteractivePet: React.FC<InteractivePetProps> = ({ isPlaying = false }) => {
-  // 1. 讀取或儲存角色與位置偏好
+  // 1. 讀取或儲存角色與位置偏好（預設在右上角）
   const [character, setCharacter] = useState<CharacterId>(() => {
     return (localStorage.getItem('pet_character') as CharacterId) || 'dog';
   });
 
   const [position, setPosition] = useState(() => {
     const saved = localStorage.getItem('pet_position');
-    return saved ? JSON.parse(saved) : { x: window.innerWidth - 120, y: window.innerHeight - 150 };
+    // 預設位置改為右上角 (X: 視窗寬度 - 140, Y: 40)
+    return saved ? JSON.parse(saved) : { x: Math.max(20, window.innerWidth - 140), y: 40 };
   });
 
   // 2. 狀態控管：拖曳、對話框、選單
@@ -87,8 +88,8 @@ export const InteractivePet: React.FC<InteractivePetProps> = ({ isPlaying = fals
 
   const handleMove = (clientX: number, clientY: number) => {
     if (!isDragging) return;
-    const newX = Math.max(10, Math.min(window.innerWidth - 80, clientX - dragOffset.x));
-    const newY = Math.max(10, Math.min(window.innerHeight - 100, clientY - dragOffset.y));
+    const newX = Math.max(10, Math.min(window.innerWidth - 100, clientX - dragOffset.x));
+    const newY = Math.max(10, Math.min(window.innerHeight - 120, clientY - dragOffset.y));
     setPosition({ x: newX, y: newY });
   };
 
@@ -106,23 +107,23 @@ export const InteractivePet: React.FC<InteractivePetProps> = ({ isPlaying = fals
       style={{ left: `${position.x}px`, top: `${position.y}px` }}
       className="fixed z-[9999] select-none touch-none flex flex-col items-center justify-center"
     >
-      {/* 💬 對話泡泡 */}
+      {/* 💬 對話泡泡（字體與邊框加大） */}
       {dialog && (
-        <div className="absolute -top-12 bg-white/95 text-gray-800 text-xs px-3 py-1.5 rounded-xl shadow-lg border border-gray-200 whitespace-nowrap animate-fade-in pointer-events-none">
+        <div className="absolute -top-14 bg-white/95 text-gray-800 text-sm font-medium px-4 py-2 rounded-2xl shadow-xl border border-gray-200 whitespace-nowrap animate-fade-in pointer-events-none">
           {dialog}
-          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-white rotate-45 border-r border-b border-gray-200"></div>
+          <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white rotate-45 border-r border-b border-gray-200"></div>
         </div>
       )}
 
-      {/* 🔄 角色切換小選單 */}
+      {/* 🔄 角色切換小選單（按鈕加大） */}
       {showMenu && (
-        <div className="absolute -top-16 flex gap-1 bg-white/90 p-1.5 rounded-full shadow-md border border-gray-200 backdrop-blur-sm">
+        <div className="absolute -top-20 flex gap-2 bg-white/95 p-2 rounded-full shadow-lg border border-gray-200 backdrop-blur-md">
           {(Object.keys(CHARACTERS) as CharacterId[]).map((id) => (
             <button
               key={id}
               onClick={() => handleSelectCharacter(id)}
-              className={`w-7 h-7 flex items-center justify-center rounded-full text-sm transition-transform hover:scale-125 ${
-                character === id ? 'bg-indigo-100 ring-2 ring-indigo-400' : ''
+              className={`w-9 h-9 flex items-center justify-center rounded-full text-lg transition-transform hover:scale-125 ${
+                character === id ? 'bg-indigo-100 ring-2 ring-indigo-500 scale-110' : ''
               }`}
             >
               {CHARACTERS[id].avatar}
@@ -131,14 +132,14 @@ export const InteractivePet: React.FC<InteractivePetProps> = ({ isPlaying = fals
         </div>
       )}
 
-      {/* 🎧 聽歌狀態下的音符氣氛小動畫 */}
+      {/* 🎧 聽歌狀態下的音符氣氛小動畫（加大放大） */}
       {isPlaying && !isDragging && (
-        <div className="absolute -top-4 right-0 text-xs animate-bounce text-indigo-500">
+        <div className="absolute -top-6 right-0 text-base animate-bounce text-indigo-500 font-bold">
           🎵
         </div>
       )}
 
-      {/* 🐶 角色本體 (支援圖片網址替換) */}
+      {/* 🐶 角色本體（放大尺寸至 text-11xl / w-40 h-40） */}
       <div
         onClick={handlePetClick}
         onMouseDown={(e) => handleStart(e.clientX, e.clientY)}
@@ -152,9 +153,9 @@ export const InteractivePet: React.FC<InteractivePetProps> = ({ isPlaying = fals
         }`}
       >
         {currentChar.customImg ? (
-          <img src={currentChar.customImg} alt={currentChar.name} className="w-12 h-12 object-contain filter drop-shadow-md" />
+          <img src={currentChar.customImg} alt={currentChar.name} className="w-20 h-20 object-contain filter drop-shadow-lg" />
         ) : (
-          <div className="text-5xl filter drop-shadow-md">
+          <div className="text-11xl filter drop-shadow-lg leading-none">
             {currentChar.avatar}
           </div>
         )}
@@ -163,7 +164,7 @@ export const InteractivePet: React.FC<InteractivePetProps> = ({ isPlaying = fals
       {/* ⚙️ 開啟切換選單的小按鈕 */}
       <button
         onClick={() => setShowMenu(!showMenu)}
-        className="mt-1 text-[10px] bg-black/40 hover:bg-black/60 text-white px-2 py-0.5 rounded-full backdrop-blur-md opacity-60 hover:opacity-100 transition-opacity"
+        className="mt-1.5 text-xs bg-black/50 hover:bg-black/70 text-white px-2.5 py-1 rounded-full backdrop-blur-md opacity-70 hover:opacity-100 transition-opacity shadow"
       >
         切換角色
       </button>
