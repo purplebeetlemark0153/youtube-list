@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ['main'] # 如果你的主分支叫 master，請改為 master
+    branches: ['main'] # 如果你的主分支名稱是 master，請改為 master
 
 permissions:
   contents: read
@@ -27,10 +27,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          # 已移除 cache: 'npm' 設定，解決缺少 lock 檔案的報錯
 
       - name: Install dependencies
-        run: npm ci || npm install
+        run: npm install
 
       - name: Build
         run: npm run build
